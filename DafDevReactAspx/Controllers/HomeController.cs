@@ -11,8 +11,8 @@ namespace DafDevReactAspx.Controllers
     {
         public ActionResult Index()
         {
-            AppDbContext dbContext = new AppDbContext();
-            dbContext.Database.CreateIfNotExists();
+            //AppDbContext dbContext = new AppDbContext();
+            //dbContext.Database.CreateIfNotExists();
             return View();
         }
 
