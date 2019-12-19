@@ -1,9 +1,10 @@
 ﻿import * as React from "react";
 import * as ReactDOM from "react-dom";
+import { MenuBox } from "./MenuBox";
 
 ReactDOM.render(
-    <div>
-        <h2>Test</h2>
-    </div>,
-    document.getElementById("food-order")
+  <div>
+    <MenuBox />
+  </div>,
+  document.getElementById("food-order")
 );

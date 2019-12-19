@@ -268,6 +268,8 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Content\src\food.tsx" />
+    <TypeScriptCompile Include="Content\src\MenuBox.tsx" />
+    <TypeScriptCompile Include="Content\src\Models.tsx" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
