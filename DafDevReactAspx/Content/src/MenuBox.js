@@ -5,7 +5,19 @@ class MenuBox extends React.Component {
     constructor(state) {
         super(state);
         this.state = { items: null, myOrder: null, showPopup: false, userId: 0, orderPlaced: false };
+        this.getLoginStatus();
         this.loadMenusFromServer();
+    }
+    getLoginStatus() {
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', '/data/GetUserId/', true);
+        xhr.onload = () => {
+            const userId = parseInt(xhr.responseText);
+            const tmp = this.state;
+            tmp.userId = userId;
+            this.setState(tmp);
+        };
+        xhr.send();
     }
     loadMenusFromServer() {
         const xhr = new XMLHttpRequest();
@@ -18,8 +30,46 @@ class MenuBox extends React.Component {
         };
         xhr.send();
     }
+    addToCart(id) {
+        if (this.state.userId < 1) {
+            alert("Log in to continue!");
+            return;
+        }
+        id--;
+        const myCart = this.state.myOrder || [];
+        const allItems = this.state.items;
+        if (myCart.indexOf(allItems[id]) > -1) {
+            const itemToOrder = myCart.find(m => m.Id === allItems[id].Id);
+            itemToOrder["Quantity"] = itemToOrder["Quantity"] + 1;
+        }
+        else {
+            const itemToOrder = allItems[id];
+            itemToOrder["Quantity"] = 1;
+            myCart.push(allItems[id]);
+        }
+        const tmp = this.state;
+        tmp.myOrder = myCart;
+        tmp.showPopup = false;
+        this.setState(tmp);
+    }
     render() {
-        return (React.createElement("div", null, "Test"));
+        let menus = this.state.items || [];
+        const menuList = menus.map(menu => {
+            return (React.createElement("div", { key: menu.Id },
+                React.createElement("b", null, menu.Name),
+                React.createElement("br", null),
+                React.createElement("img", { style: { width: '100px', float: 'left', margin: '5px' }, src: "/Img/" + menu.Picture }),
+                menu.Description,
+                React.createElement("div", null,
+                    "$",
+                    menu.Price,
+                    " | ",
+                    React.createElement("a", { href: "#", onClick: this.addToCart.bind(this, menu.Id) }, "Add to cart")),
+                React.createElement("hr", null)));
+        });
+        return (React.createElement("div", null,
+            React.createElement("div", { id: "wrapper" },
+                React.createElement("div", { id: "dvmenu" }, menuList))));
     }
     ;
 }
