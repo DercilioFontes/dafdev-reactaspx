@@ -53,7 +53,7 @@ class MenuBox extends React.Component {
         this.setState(tmp);
     }
     render() {
-        let menus = this.state.items || [];
+        const menus = this.state.items || new Array();
         const menuList = menus.map(menu => {
             return (React.createElement("div", { key: menu.Id },
                 React.createElement("b", null, menu.Name),
@@ -67,9 +67,36 @@ class MenuBox extends React.Component {
                     React.createElement("a", { href: "#", onClick: this.addToCart.bind(this, menu.Id) }, "Add to cart")),
                 React.createElement("hr", null)));
         });
+        let total = 0;
+        const myCart = this.state.myOrder || new Array();
+        const myItems = myCart.map(menu => {
+            total += menu.Price * menu.Quantity;
+            return (React.createElement("div", { key: menu.Id },
+                React.createElement("img", { style: { width: '75px', float: 'left', margin: '5px' }, src: "/Img/" + menu.Picture }),
+                menu.Name,
+                React.createElement("br", null),
+                "Qty: ",
+                menu.Quantity,
+                React.createElement("br", null),
+                "Price: $",
+                menu.Price * menu.Quantity,
+                React.createElement("br", null),
+                React.createElement("hr", null)));
+        });
+        let totalAndContinueLink = React.createElement("div", { className: "grandTotal cartEmpty" }, "Cart Empty!");
+        if (total > 0) {
+            totalAndContinueLink =
+                React.createElement("div", { className: "grandTotal cartNotEmpty" },
+                    "Grand Total: $",
+                    total,
+                    React.createElement("button", { className: "greenBtn continueOrder" }, "Continue Order"));
+        }
         return (React.createElement("div", null,
             React.createElement("div", { id: "wrapper" },
-                React.createElement("div", { id: "dvmenu" }, menuList))));
+                React.createElement("div", { id: "dvmenu" }, menuList),
+                React.createElement("div", { id: "dvcart" },
+                    React.createElement("div", { id: "cartContent" }, myItems),
+                    totalAndContinueLink))));
     }
     ;
 }

@@ -125,7 +125,7 @@
     bottom: 0;
     margin: auto;
     background-color: rgba(0,0,0, 0.5);
-    zzz-index: 12; /** must be more that #overlay's z-index */
+    z-index: 12; /** must be more that #overlay's z-index */
 }
 
 .popup22zz {

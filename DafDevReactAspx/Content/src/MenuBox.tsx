@@ -1,5 +1,5 @@
 ﻿import * as React from "react";
-import * as ReactDOM from "react-dom";
+//import * as ReactDOM from "react-dom";
 import { FoodModel, IAppState } from "./Models"
 
 export class MenuBox extends React.Component<any, IAppState> {
@@ -40,7 +40,7 @@ export class MenuBox extends React.Component<any, IAppState> {
             return;
         }
 
-        id--;
+        id--; // DB has Id from 1. Changing to match zero index pattern.
         const myCart = this.state.myOrder || [];
         const allItems = this.state.items;
         if (myCart.indexOf(allItems[id]) > -1) {
@@ -59,7 +59,7 @@ export class MenuBox extends React.Component<any, IAppState> {
     }
 
     render() {
-        let menus = this.state.items || [];
+        const menus: FoodModel[] = this.state.items || new Array<FoodModel>();
         const menuList = menus.map(menu => {
             return (
                 <div key={menu.Id}>
@@ -70,11 +70,42 @@ export class MenuBox extends React.Component<any, IAppState> {
                 </div>
             );
         });
+
+        let total: number = 0;
+        const myCart: FoodModel[] = this.state.myOrder || new Array<FoodModel>();
+        const myItems = myCart.map(menu => {
+            total += menu.Price * menu.Quantity;
+            return (
+                <div key={menu.Id}>
+                    <img style={{ width: '75px', float: 'left', margin: '5px' }} src={"/Img/" + menu.Picture} />
+                    {menu.Name}<br />
+                    Qty: {menu.Quantity}<br />
+                    Price: ${menu.Price * menu.Quantity}<br />
+                    <hr />
+                </div>
+                );
+        });
+
+        let totalAndContinueLink = <div className="grandTotal cartEmpty">Cart Empty!</div>;
+        if (total > 0) {
+            totalAndContinueLink =
+                <div className="grandTotal cartNotEmpty">
+                    Grand Total: ${total}
+                    <button className="greenBtn continueOrder">Continue Order</button>
+                </div>;
+        }
+
         return (
             <div>
                 <div id="wrapper">
                     <div id="dvmenu">
                         {menuList}
+                    </div>
+                    <div id="dvcart">
+                        <div id="cartContent">
+                            {myItems}
+                        </div>
+                        {totalAndContinueLink}
                     </div>
                 </div>
             </div>);
